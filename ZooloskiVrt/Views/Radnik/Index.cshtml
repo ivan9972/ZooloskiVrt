@@ -1,0 +1,341 @@
+﻿@model IEnumerable<ZooloskiVrt.Models.Radnik>
+
+@{
+    ViewData["Title"] = "Radnici";
+    var list = Model?
+        .OrderBy(r => r.Prezime)
+        .ThenBy(r => r.Ime)
+        .ToList()
+        ?? new List<ZooloskiVrt.Models.Radnik>();
+    var total = list.Count;
+}
+
+<style>
+    .topbar2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .kpis {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+
+    .kpi {
+        background: rgba(255,255,255,.85);
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 16px;
+        padding: 10px 12px;
+        box-shadow: 0 10px 22px rgba(17,24,39,.05);
+        min-width: 150px;
+    }
+
+        .kpi .k {
+            color: #6b7280;
+            font-weight: 800;
+            font-size: .85rem;
+        }
+
+        .kpi .v {
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+
+    .tools {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .search {
+        min-width: 280px;
+        border-radius: 14px;
+        border: 1px solid rgba(17,24,39,.12);
+        padding: .65rem .85rem;
+        background: #fff;
+    }
+
+        .search:focus {
+            outline: none;
+            box-shadow: 0 0 0 .2rem rgba(37,107,42,.15);
+            border-color: rgba(37,107,42,.25);
+        }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 12px;
+    }
+
+    .cardp {
+        grid-column: span 6;
+        background: rgba(255,255,255,.92);
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 18px;
+        box-shadow: 0 10px 26px rgba(17,24,39,.06);
+        padding: 14px;
+        transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+        .cardp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(17,24,39,.10);
+        }
+
+    .row1 {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .person {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(37,107,42,.18), rgba(47,124,53,.12));
+        border: 1px solid rgba(37,107,42,.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        color: #1f3a22;
+        flex-shrink: 0;
+    }
+
+    .namebox {
+        min-width: 0;
+    }
+
+    .name {
+        margin: 0;
+        font-weight: 900;
+        font-size: 1.05rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sub {
+        margin-top: 2px;
+        color: #6b7280;
+        font-weight: 700;
+        font-size: .92rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .badge-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        font-weight: 800;
+        font-size: .85rem;
+        background: rgba(13,110,253,.10);
+        border: 1px solid rgba(13,110,253,.16);
+        color: #084298;
+        white-space: nowrap;
+    }
+
+    .b-edu {
+        background: rgba(25,135,84,.12);
+        border-color: rgba(25,135,84,.20);
+        color: #0f5132;
+    }
+
+    .b-none {
+        background: rgba(108,117,125,.12);
+        border-color: rgba(108,117,125,.18);
+        color: #3b4147;
+    }
+
+    .meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        font-weight: 650;
+        font-size: .92rem;
+        color: #374151;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        background: rgba(255,255,255,.9);
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 12px;
+    }
+
+    .iconbtn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 34px;
+        border-radius: 12px;
+        border: 1px solid rgba(17,24,39,.10);
+        background: #fff;
+        text-decoration: none;
+    }
+
+        .iconbtn:hover {
+            box-shadow: 0 10px 18px rgba(17,24,39,.08);
+        }
+
+    .empty {
+        border: 1px dashed rgba(17,24,39,.20);
+        border-radius: 18px;
+        padding: 28px;
+        text-align: center;
+        background: rgba(255,255,255,.55);
+    }
+
+        .empty i {
+            font-size: 2.2rem;
+            opacity: .75;
+        }
+
+    @@media (max-width: 992px) {
+        .cardp {
+            grid-column: span 12;
+        }
+
+        .search {
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+</style>
+
+<div class="topbar2">
+    <div>
+        <h3 class="mb-1">Radnici</h3>
+        <div class="text-muted fw-semibold">Direktorij zaposlenika</div>
+
+        <div class="kpis">
+            <div class="kpi">
+                <div class="k"><i class="bi bi-collection me-1"></i>Ukupno</div>
+                <div class="v">@total</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tools">
+        <input id="rSearch" class="search" type="text" placeholder="Pretraži po imenu i prezimenu…" />
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj
+        </a>
+    </div>
+</div>
+
+@if (!list.Any())
+{
+    <div class="empty">
+        <i class="bi bi-people"></i>
+        <h5 class="mt-2 mb-1">Nema radnika</h5>
+        <p class="text-muted mb-3">Dodaj prvog radnika u sustav.</p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj radnika
+        </a>
+    </div>
+}
+else
+{
+    <div id="rGrid" class="grid">
+        @foreach (var r in list)
+        {
+            var fullName = $"{r.Ime} {r.Prezime}".Trim();
+            var initials =
+            (string.IsNullOrWhiteSpace(r.Ime) ? "" : r.Ime.Trim()[0].ToString().ToUpper()) +
+            (string.IsNullOrWhiteSpace(r.Prezime) ? "" : r.Prezime.Trim()[0].ToString().ToUpper());
+
+            var edu = string.IsNullOrWhiteSpace(r.Obrazovanje) ? "Bez obrazovanja" : r.Obrazovanje;
+
+            <div class="cardp" data-search="@($"{r.Ime} {r.Prezime}")">
+                <div class="row1">
+                    <div class="person">
+                        <div class="avatar">@initials</div>
+                        <div class="namebox">
+                            <p class="name">@fullName</p>
+                            <div class="sub">@((string.IsNullOrWhiteSpace(r.Email)) ? "—" : r.Email)</div>
+                        </div>
+                    </div>
+
+                    <span class="badge-soft @(string.IsNullOrWhiteSpace(r.Obrazovanje) ? "b-none" : "b-edu")">
+                        <i class="bi bi-mortarboard"></i> @edu
+                    </span>
+                </div>
+
+                <div class="meta">
+                    @if (!string.IsNullOrWhiteSpace(r.Kontakt))
+                    {
+                        <span class="pill"><i class="bi bi-telephone"></i> @r.Kontakt</span>
+                    }
+                    <span class="pill"><i class="bi bi-person-badge"></i> ID: @r.ID</span>
+                </div>
+
+                <div class="actions">
+                    <a asp-action="Edit" asp-route-id="@r.ID" class="iconbtn" title="Uredi">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@r.ID" class="iconbtn" title="Obriši">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const input = document.getElementById('rSearch');
+            const grid = document.getElementById('rGrid');
+            if (!input || !grid) return;
+
+            function norm(s) {
+                return (s || "")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                    .trim();
+            }
+
+            input.addEventListener('input', function () {
+                const q = norm(input.value);
+                grid.querySelectorAll('[data-search]').forEach(card => {
+                    const hay = norm(card.getAttribute('data-search'));
+                    card.style.display = hay.includes(q) ? '' : 'none';
+                });
+            });
+        })();
+    </script>
+}

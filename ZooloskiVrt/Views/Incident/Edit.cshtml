@@ -1,0 +1,54 @@
+﻿@model ZooloskiVrt.Models.Incident
+@{
+    ViewData["Title"] = "Uredi incident";
+}
+
+<h2>Uredi incident</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ID" />
+
+    <div class="form-group mb-2">
+        <label asp-for="Opis" class="form-label"></label>
+        <input asp-for="Opis" class="form-control" />
+        <span asp-validation-for="Opis" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Datum" class="form-label"></label>
+        <input asp-for="Datum" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Ozbiljnost" class="form-label"></label>
+        <input asp-for="Ozbiljnost" class="form-control" />
+    </div>
+
+    <div class="form-group mb-2">
+        <label>Nastambe</label>
+        <select name="Nastambe" asp-items="ViewBag.Nastambe" multiple class="form-select">
+            @* odabrane nastambe *@
+            @foreach (var n in Model.IncidentiNastambe)
+            {
+                <option value="@n.NastambaID" selected>@n.Nastamba.Naziv</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-2">
+        <label>Životinje</label>
+        <select name="Zivotinje" asp-items="ViewBag.Zivotinje" multiple class="form-select">
+            @foreach (var z in Model.IncidentiZivotinje)
+            {
+                <option value="@z.ZivotinjaID" selected>@z.Zivotinja.Ime</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi promjene</button>
+    <a class="btn btn-secondary" asp-action="Index">Odustani</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

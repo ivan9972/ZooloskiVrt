@@ -1,0 +1,24 @@
+﻿@model ZooloskiVrt.Models.Radnik
+@{
+    ViewData["Title"] = "Obriši radnika";
+}
+
+<h3>Jeste li sigurni da želite obrisati ovog radnika?</h3>
+<hr />
+
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Ime @Model.Prezime</h5>
+        <p class="card-text">
+            Kontakt: @Model.Kontakt <br />
+            Email: @Model.Email <br />
+            Obrazovanje: @Model.Obrazovanje
+        </p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ID" />
+    <button type="submit" class="btn btn-danger">Obriši</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

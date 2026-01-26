@@ -1,0 +1,44 @@
+﻿@model ZooloskiVrt.Models.Radnik
+@{
+    ViewData["Title"] = "Dodaj radnika";
+}
+
+<h3>Dodaj radnika</h3>
+<hr />
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Ime" class="form-label"></label>
+        <input asp-for="Ime" class="form-control" />
+        <span asp-validation-for="Ime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Prezime" class="form-label"></label>
+        <input asp-for="Prezime" class="form-control" />
+        <span asp-validation-for="Prezime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Kontakt" class="form-label"></label>
+        <input asp-for="Kontakt" class="form-control" />
+        <span asp-validation-for="Kontakt" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Obrazovanje" class="form-label"></label>
+        <input asp-for="Obrazovanje" class="form-control" />
+        <span asp-validation-for="Obrazovanje" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>
+
+

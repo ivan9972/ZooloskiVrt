@@ -1,0 +1,18 @@
+﻿@model ZooloskiVrt.Models.Zivotinja
+@{
+    ViewData["Title"] = "Obriši životinju";
+}
+
+<h4>Jeste li sigurni da želite obrisati ovu životinju?</h4>
+
+<div class="mb-3">
+    <div class="fw-bold">@Model.Ime</div>
+    <div class="text-muted">Nastamba: @(Model.Nastamba?.Naziv ?? "-")</div>
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="ID" />
+    <button type="submit" class="btn btn-danger">Obriši</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

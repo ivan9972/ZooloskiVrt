@@ -1,0 +1,208 @@
+﻿@model IEnumerable<ZooloskiVrt.Models.Nastamba>
+
+@{
+    ViewData["Title"] = "Nastambe";
+    var list = Model?.OrderBy(n => n.Naziv).ToList() ?? new List<ZooloskiVrt.Models.Nastamba>();
+}
+
+<style>
+    .pagebar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .righttools {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .search {
+        min-width: 260px;
+        border-radius: 999px;
+        border: 1px solid rgba(17,24,39,.12);
+        padding: .55rem .9rem;
+        background: #fff;
+    }
+
+        .search:focus {
+            outline: none;
+            box-shadow: 0 0 0 .2rem rgba(37,107,42,.15);
+            border-color: rgba(37,107,42,.25);
+        }
+
+    .rowbox {
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 14px;
+        background: #fff;
+        padding: 14px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+    }
+
+        .rowbox:hover {
+            box-shadow: 0 10px 22px rgba(17,24,39,.08);
+        }
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .title {
+        font-weight: 900;
+        font-size: 1.05rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        color: #6b7280;
+        font-weight: 600;
+        font-size: .92rem;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 999px;
+        padding: .3rem .6rem;
+        background: #fff;
+        color: #374151;
+        font-weight: 650;
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .empty {
+        border: 1px dashed rgba(17,24,39,.20);
+        border-radius: 18px;
+        padding: 28px;
+        text-align: center;
+        background: rgba(255,255,255,.55);
+    }
+
+        .empty i {
+            font-size: 2.2rem;
+            opacity: .75;
+        }
+
+    @@media (max-width:768px) {
+        .rowbox {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        .search {
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+</style>
+
+<div class="pagebar">
+    <div>
+        <h3 class="mb-1">Nastambe</h3>
+        <div class="text-muted fw-semibold">Pregled i upravljanje nastambama</div>
+    </div>
+
+    <div class="righttools">
+        <input id="nSearch" class="search" type="text" placeholder="Pretraži nastambe po nazivu..." />
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj
+        </a>
+    </div>
+</div>
+
+@if (!list.Any())
+{
+    <div class="empty">
+        <i class="bi bi-house-heart"></i>
+        <h5 class="mt-2 mb-1">Nema nastambi</h5>
+        <p class="text-muted mb-3">Dodaj prvu nastambu u sustav.</p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj nastambu
+        </a>
+    </div>
+}
+else
+{
+    <div id="nList">
+        @foreach (var n in list)
+        {
+            <div class="rowbox" data-search="@n.Naziv">
+                <div class="left">
+                    <p class="title">@n.Naziv</p>
+                    <div class="meta">
+                        <span class="pill"><i class="bi bi-house"></i> @(string.IsNullOrWhiteSpace(n.Tip) ? "-" : n.Tip)</span>
+                        <span class="pill"><i class="bi bi-sun"></i> @(string.IsNullOrWhiteSpace(n.RazinaOsuncanosti) ? "-" : n.RazinaOsuncanosti)</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a asp-action="Details" asp-route-id="@n.ID" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye"></i> Detalji
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@n.ID" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@n.ID" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function(){
+            const input = document.getElementById('nSearch');
+            const list = document.getElementById('nList');
+            if(!input || !list) return;
+
+            function norm(s){
+                return (s || "")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                    .trim();
+            }
+
+            input.addEventListener('input', function(){
+                const q = norm(input.value);
+                list.querySelectorAll('[data-search]').forEach(r => {
+                    const hay = norm(r.getAttribute('data-search'));
+                    r.style.display = hay.includes(q) ? '' : 'none';
+                });
+            });
+        })();
+    </script>
+}

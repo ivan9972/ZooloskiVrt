@@ -1,0 +1,26 @@
+﻿@model ZooloskiVrt.Models.Nastamba
+@{
+    ViewData["Title"] = "Uredi nastambu";
+}
+
+<h2>Uredi nastambu</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ID" />
+    <div class="form-group mb-2">
+        <label asp-for="Naziv" class="form-label"></label>
+        <input asp-for="Naziv" class="form-control" />
+        <span asp-validation-for="Naziv" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Tip" class="form-label"></label>
+        <input asp-for="Tip" class="form-control" />
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="RazinaOsuncanosti" class="form-label"></label>
+        <input asp-for="RazinaOsuncanosti" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi promjene</button>
+    <a class="btn btn-secondary" asp-action="Index">Natrag</a>
+</form>

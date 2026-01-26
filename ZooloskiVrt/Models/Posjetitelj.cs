@@ -8,11 +8,14 @@ namespace ZooloskiVrt.Models
     {
         [Key]
         public int ID { get; set; }
-        public string ImeGrupe { get; set; }
+
+        public string ImeGrupe { get; set; } = string.Empty;
+
         public DateTime TerminPosjete { get; set; }
 
         [ForeignKey(nameof(Vodic))]
         public int? VodicID { get; set; }
-        public Radnik Vodic { get; set; }
+
+        public Radnik? Vodic { get; set; }
     }
 }

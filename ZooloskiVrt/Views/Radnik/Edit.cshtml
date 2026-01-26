@@ -1,0 +1,39 @@
+﻿@model ZooloskiVrt.Models.Radnik
+@{
+    ViewData["Title"] = "Uredi radnika";
+}
+
+<h3>Uredi radnika</h3>
+<hr />
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ID" />
+    <div class="mb-3">
+        <label asp-for="Ime" class="form-label"></label>
+        <input asp-for="Ime" class="form-control" />
+        <span asp-validation-for="Ime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Prezime" class="form-label"></label>
+        <input asp-for="Prezime" class="form-control" />
+        <span asp-validation-for="Prezime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Kontakt" class="form-label"></label>
+        <input asp-for="Kontakt" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Obrazovanje" class="form-label"></label>
+        <input asp-for="Obrazovanje" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Spremi promjene</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,12 @@
+﻿@model ZooloskiVrt.Models.Posjetitelj
+@{
+    ViewData["Title"] = "Obriši posjetitelja";
+}
+
+<h3>Jeste li sigurni da želite obrisati grupu "@Model.ImeGrupe"?</h3>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ID" />
+    <button type="submit" class="btn btn-danger">Obriši</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

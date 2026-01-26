@@ -1,0 +1,25 @@
+﻿@model ZooloskiVrt.Models.Obaveza
+@{
+    ViewData["Title"] = "Obriši obavezu";
+}
+
+<h3>Jeste li sigurni da želite obrisati ovu obavezu?</h3>
+<hr />
+
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Opis</h5>
+        <p class="card-text">
+            Datum: @Model.Datum.ToShortDateString() <br />
+            Status: @Model.Status <br />
+            Radnik: @Model.Radnik.Ime @Model.Radnik.Prezime <br />
+            Nastamba: @Model.Nastamba.Naziv
+        </p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ID" />
+    <button type="submit" class="btn btn-danger">Obriši</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

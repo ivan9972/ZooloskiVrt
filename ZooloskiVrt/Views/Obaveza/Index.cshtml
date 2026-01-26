@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ZooloskiVrt.Models.Obaveza>
+
+@{
+    ViewData["Title"] = "Obaveze";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h3 class="mb-0">Obaveze</h3>
+        <div class="text-muted fw-semibold">
+            Pregled obaveza po radniku i nastambi
+        </div>
+    </div>
+
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i> Dodaj obavezu
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-light border text-center">
+        <i class="bi bi-check2-square" style="font-size:2rem;"></i>
+        <h5 class="mt-2">Nema obaveza</h5>
+        <p class="mb-3 text-muted">Dodaj prvu obavezu u sustav.</p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj obavezu
+        </a>
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle shadow-sm">
+        <thead class="table-success">
+            <tr>
+                <th>Opis</th>
+                <th>Datum</th>
+                <th>Status</th>
+                <th>Radnik</th>
+                <th>Nastamba</th>
+                <th style="width:200px;">Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model.OrderByDescending(x => x.Datum))
+            {
+                var status = (o.Status ?? "").ToLowerInvariant();
+
+                var badge =
+                status.Contains("otkaz") ? "danger" :
+                status.Contains("zav") || status.Contains("got") ? "success" :
+                status.Contains("tijek") ? "warning" :
+                "secondary";
+
+                <tr>
+                    <td>@o.Opis</td>
+                    <td>@o.Datum.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <span class="badge bg-@badge">
+                            @(string.IsNullOrWhiteSpace(o.Status) ? "Bez statusa" : o.Status)
+                        </span>
+                    </td>
+                    <td>@o.Radnik.Ime @o.Radnik.Prezime</td>
+                    <td>
+                        @o.Nastamba.Naziv
+                        <a asp-controller="Nastamba"
+                           asp-action="Details"
+                           asp-route-id="@o.NastambaID"
+                           class="ms-1 text-decoration-none"
+                           title="Prikaži životinje">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@o.ID" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-square"></i> Uredi
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@o.ID" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Obriši
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

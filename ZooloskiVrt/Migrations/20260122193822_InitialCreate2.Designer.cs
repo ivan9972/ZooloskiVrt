@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZooloskiVrt.Data;
 
@@ -11,13 +12,15 @@ using ZooloskiVrt.Data;
 namespace ZooloskiVrt.Migrations
 {
     [DbContext(typeof(ZooloskiVrtContext))]
-    partial class ZooloskiVrtContextModelSnapshot : ModelSnapshot
+    [Migration("20260122193822_InitialCreate2")]
+    partial class InitialCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -452,7 +455,7 @@ namespace ZooloskiVrt.Migrations
                     b.HasOne("ZooloskiVrt.Models.Nastamba", "Nastamba")
                         .WithMany("IncidentiNastambe")
                         .HasForeignKey("NastambaID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Incident");
@@ -471,7 +474,7 @@ namespace ZooloskiVrt.Migrations
                     b.HasOne("ZooloskiVrt.Models.Zivotinja", "Zivotinja")
                         .WithMany("IncidentiZivotinje")
                         .HasForeignKey("ZivotinjaID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Incident");
@@ -495,13 +498,13 @@ namespace ZooloskiVrt.Migrations
                     b.HasOne("ZooloskiVrt.Models.Nastamba", "Nastamba")
                         .WithMany("Obaveze")
                         .HasForeignKey("NastambaID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZooloskiVrt.Models.Radnik", "Radnik")
                         .WithMany("Obaveze")
                         .HasForeignKey("RadnikID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Nastamba");
@@ -524,8 +527,7 @@ namespace ZooloskiVrt.Migrations
                 {
                     b.HasOne("ZooloskiVrt.Models.Radnik", "Vodic")
                         .WithMany()
-                        .HasForeignKey("VodicID")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("VodicID");
 
                     b.Navigation("Vodic");
                 });
@@ -535,13 +537,13 @@ namespace ZooloskiVrt.Migrations
                     b.HasOne("ZooloskiVrt.Models.Incident", "Incident")
                         .WithMany("Sanacije")
                         .HasForeignKey("IncidentID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZooloskiVrt.Models.Radnik", "Radnik")
                         .WithMany("Sanacije")
                         .HasForeignKey("RadnikID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Incident");
@@ -576,7 +578,7 @@ namespace ZooloskiVrt.Migrations
                     b.HasOne("ZooloskiVrt.Models.Nastamba", "Nastamba")
                         .WithMany("Zivotinje")
                         .HasForeignKey("NastambaID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Nastamba");

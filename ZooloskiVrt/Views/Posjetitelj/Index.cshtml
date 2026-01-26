@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ZooloskiVrt.Models.Posjetitelj>
+
+@{
+    ViewData["Title"] = "Posjetitelji";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Posjetitelji</h3>
+        <div class="text-muted fw-semibold">
+            Evidencija organiziranih posjeta i dodijeljenih vodiča
+        </div>
+    </div>
+
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i> Dodaj grupu
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-light border text-center">
+        <i class="bi bi-person-walking" style="font-size:2rem;"></i>
+        <h5 class="mt-2">Nema posjetitelja</h5>
+        <p class="text-muted mb-3">Dodaj prvu grupu posjetitelja.</p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj grupu
+        </a>
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle shadow-sm">
+        <thead class="table-success">
+            <tr>
+                <th>Ime grupe</th>
+                <th>Termin posjete</th>
+                <th>Vodič</th>
+                <th style="width:180px;">Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.OrderBy(x => x.TerminPosjete))
+            {
+                var isPast = p.TerminPosjete < DateTime.Now;
+
+                <tr>
+                    <td class="fw-semibold">@p.ImeGrupe</td>
+
+                    <td>
+                        <span class="badge @(isPast ? "bg-secondary" : "bg-success")">
+                            @p.TerminPosjete.ToString("dd.MM.yyyy HH:mm")
+                        </span>
+                    </td>
+
+                    <td>
+                        @if (p.Vodic != null)
+                        {
+                            <span class="fw-semibold">
+                                <i class="bi bi-person-badge me-1"></i>
+                                @p.Vodic.Ime @p.Vodic.Prezime
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Nije dodijeljen</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@p.ID" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-square"></i> Uredi
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@p.ID" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Obriši
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

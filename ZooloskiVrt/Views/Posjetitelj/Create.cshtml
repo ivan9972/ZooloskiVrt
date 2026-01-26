@@ -1,0 +1,29 @@
+﻿@model ZooloskiVrt.Models.Posjetitelj
+@{
+    ViewData["Title"] = "Dodaj posjetitelja";
+}
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="ImeGrupe" class="form-label"></label>
+        <input asp-for="ImeGrupe" class="form-control" />
+        <span asp-validation-for="ImeGrupe" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TerminPosjete" class="form-label"></label>
+        <input asp-for="TerminPosjete" type="datetime-local" class="form-control" />
+        <span asp-validation-for="TerminPosjete" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VodicID" class="form-label">Vodič</label>
+        <select asp-for="VodicID" asp-items="ViewBag.VodicID" class="form-select">
+            <option value="">-- Odaberi vodiča --</option>
+        </select>
+        <span asp-validation-for="VodicID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Spremi</button>
+    <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+</form>

@@ -1,0 +1,227 @@
+﻿@model ZooloskiVrt.Models.Nastamba
+
+@{
+    ViewData["Title"] = $"Nastamba: {Model.Naziv}";
+    var zivotinje = Model.Zivotinje?.OrderBy(z => z.Ime).ToList() ?? new List<ZooloskiVrt.Models.Zivotinja>();
+}
+
+<style>
+    .pagebar {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .righttools {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .search {
+        min-width: 260px;
+        border-radius: 999px;
+        border: 1px solid rgba(17,24,39,.12);
+        padding: .55rem .9rem;
+        background: #fff;
+    }
+
+        .search:focus {
+            outline: none;
+            box-shadow: 0 0 0 .2rem rgba(37,107,42,.15);
+            border-color: rgba(37,107,42,.25);
+        }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        background: #fff;
+        font-weight: 650;
+        font-size: .92rem;
+        color: #374151;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(12,1fr);
+        gap: 12px;
+    }
+
+    .cardz {
+        grid-column: span 4;
+        background: #fff;
+        border: 1px solid rgba(17,24,39,.10);
+        border-radius: 18px;
+        box-shadow: 0 10px 26px rgba(17,24,39,.06);
+        padding: 14px;
+    }
+
+    .title {
+        font-weight: 900;
+        font-size: 1.05rem;
+        margin: 0;
+    }
+
+    .muted {
+        color: #6b7280;
+        font-weight: 600;
+        font-size: .92rem;
+        margin-top: 3px;
+    }
+
+    .badge-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: .35rem .6rem;
+        font-weight: 800;
+        font-size: .85rem;
+    }
+
+    .ok {
+        background: rgba(25,135,84,.12);
+        color: #0f5132;
+    }
+
+    .no {
+        background: rgba(220,53,69,.12);
+        color: #842029;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .empty {
+        border: 1px dashed rgba(17,24,39,.20);
+        border-radius: 18px;
+        padding: 28px;
+        text-align: center;
+        background: rgba(255,255,255,.55);
+    }
+
+        .empty i {
+            font-size: 2.2rem;
+            opacity: .75;
+        }
+
+    @@media (max-width:1200px) {
+        .cardz {
+            grid-column: span 6;
+        }
+    }
+
+    @@media (max-width:768px) {
+        .cardz {
+            grid-column: span 12;
+        }
+
+        .search {
+            min-width: 100%;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="pagebar">
+    <div>
+        <h3 class="mb-1">@Model.Naziv</h3>
+        <div class="text-muted fw-semibold">
+            Tip: @(string.IsNullOrWhiteSpace(Model.Tip) ? "-" : Model.Tip)
+            • Osunčanost: @(string.IsNullOrWhiteSpace(Model.RazinaOsuncanosti) ? "-" : Model.RazinaOsuncanosti)
+        </div>
+
+        <div class="mt-2 d-flex gap-2 flex-wrap">
+            <span class="pill"><i class="bi bi-collection"></i> Životinja: <b class="ms-1">@zivotinje.Count</b></span>
+        </div>
+    </div>
+
+    <div class="righttools">
+        <input id="zSearch2" class="search" type="text" placeholder="Pretraži životinje po imenu…" />
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Nazad
+        </a>
+    </div>
+</div>
+
+@if (zivotinje.Count == 0)
+{
+    <div class="empty">
+        <i class="bi bi-bug"></i>
+        <h5 class="mt-2 mb-1">Nema životinja u ovoj nastambi</h5>
+        <p class="text-muted mb-3">Dodaj životinju i dodijeli je ovoj nastambi.</p>
+        <a asp-controller="Zivotinja" asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj životinju
+        </a>
+    </div>
+}
+else
+{
+    <div id="zGrid2" class="grid">
+        @foreach (var z in zivotinje)
+        {
+            <div class="cardz" data-search="@z.Ime">
+                <div class="d-flex justify-content-between gap-2">
+                    <div>
+                        <p class="title">@z.Ime</p>
+                        <div class="muted">@(!string.IsNullOrWhiteSpace(z.HrvatskiNaziv) ? z.HrvatskiNaziv : "-")</div>
+                    </div>
+
+                    <span class="badge-soft @(z.Aktivna ? "ok" : "no")">
+                        @(z.Aktivna ? "Aktivna" : "Neaktivna")
+                    </span>
+                </div>
+
+                <div class="mt-2 text-muted fw-semibold">
+                    <i class="bi bi-calendar3 me-1"></i>@z.DatumNabave.ToString("dd.MM.yyyy")
+                </div>
+
+                <div class="actions">
+                    <a asp-controller="Zivotinja" asp-action="Edit" asp-route-id="@z.ID" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i> Uredi
+                    </a>
+                    <a asp-controller="Zivotinja" asp-action="Delete" asp-route-id="@z.ID" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function(){
+            const input = document.getElementById('zSearch2');
+            const grid = document.getElementById('zGrid2');
+            if(!input || !grid) return;
+
+            function norm(s){
+                return (s || "")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                    .trim();
+            }
+
+            input.addEventListener('input', function(){
+                const q = norm(input.value);
+                grid.querySelectorAll('[data-search]').forEach(c => {
+                    const hay = norm(c.getAttribute('data-search'));
+                    c.style.display = hay.includes(q) ? '' : 'none';
+                });
+            });
+        })();
+    </script>
+}

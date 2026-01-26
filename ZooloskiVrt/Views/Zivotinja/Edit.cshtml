@@ -1,0 +1,72 @@
+﻿@model ZooloskiVrt.Models.Zivotinja
+
+@{
+    ViewData["Title"] = "Uređivanje životinje";
+}
+
+<h3 class="mb-3">@ViewData["Title"]</h3>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="ID" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="mb-3">
+        <label asp-for="Ime" class="form-label">Ime životinje</label>
+        <input asp-for="Ime" class="form-control" />
+        <span asp-validation-for="Ime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LatinskiNaziv" class="form-label">Latinski naziv</label>
+        <input asp-for="LatinskiNaziv" class="form-control" />
+        <span asp-validation-for="LatinskiNaziv" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HrvatskiNaziv" class="form-label">Hrvatski naziv</label>
+        <input asp-for="HrvatskiNaziv" class="form-control" />
+        <span asp-validation-for="HrvatskiNaziv" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NacinNabave" class="form-label">Način nabave</label>
+        <input asp-for="NacinNabave" class="form-control" />
+        <span asp-validation-for="NacinNabave" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DatumNabave" class="form-label">Datum nabave</label>
+        <input asp-for="DatumNabave" type="date" class="form-control" />
+        <span asp-validation-for="DatumNabave" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Aktivna" class="form-check-input" />
+        <label asp-for="Aktivna" class="form-check-label">
+            Aktivna životinja
+        </label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NastambaID" class="form-label">Nastamba</label>
+        <select asp-for="NastambaID"
+                asp-items="(SelectList)ViewBag.Nastambe"
+                class="form-select">
+            <option value="">— Odaberite nastambu —</option>
+        </select>
+        <span asp-validation-for="NastambaID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Spremi promjene
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">
+        Odustani
+    </a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

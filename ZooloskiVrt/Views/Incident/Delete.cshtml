@@ -1,0 +1,24 @@
+﻿@model ZooloskiVrt.Models.Incident
+@{
+    ViewData["Title"] = "Obriši incident";
+}
+
+<h2>Obriši incident</h2>
+
+<div class="alert alert-warning">
+    <p>Jeste li sigurni da želite obrisati ovaj incident?</p>
+</div>
+
+<div>
+    <h5>Opis: @Model.Opis</h5>
+    <h5>Datum: @Model.Datum.ToShortDateString()</h5>
+    <h5>Ozbiljnost: @Model.Ozbiljnost</h5>
+    <h5>Nastambe: @string.Join(", ", Model.IncidentiNastambe?.Select(n => n.Nastamba.Naziv) ?? new string[] { })</h5>
+    <h5>Životinje: @string.Join(", ", Model.IncidentiZivotinje?.Select(z => z.Zivotinja.Ime) ?? new string[] { })</h5>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ID" />
+    <button type="submit" class="btn btn-danger">Obriši</button>
+    <a class="btn btn-secondary" asp-action="Index">Natrag</a>
+</form>

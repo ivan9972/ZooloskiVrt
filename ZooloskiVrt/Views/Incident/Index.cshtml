@@ -1,0 +1,105 @@
+﻿@model IEnumerable<ZooloskiVrt.Models.Incident>
+
+@{
+    ViewData["Title"] = "Incidenti";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="mb-0">Incidenti</h3>
+        <div class="text-muted fw-semibold">
+            Evidencija izvanrednih događaja u zoološkom vrtu
+        </div>
+    </div>
+
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i> Dodaj incident
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-light border text-center">
+        <i class="bi bi-exclamation-triangle" style="font-size:2rem;"></i>
+        <h5 class="mt-2">Nema incidenata</h5>
+        <p class="text-muted mb-3">
+            Trenutno nema evidentiranih incidenata.
+        </p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Dodaj incident
+        </a>
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle shadow-sm">
+        <thead class="table-success">
+            <tr>
+                <th>Opis</th>
+                <th>Datum</th>
+                <th>Ozbiljnost</th>
+                <th>Nastambe</th>
+                <th>Životinje</th>
+                <th style="width:180px;">Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model.OrderByDescending(x => x.Datum))
+            {
+                var ozbiljnost = (i.Ozbiljnost ?? "").ToLowerInvariant();
+                var badge =
+                ozbiljnost.Contains("vis") ? "danger" :
+                ozbiljnost.Contains("sred") ? "warning" :
+                ozbiljnost.Contains("nis") ? "success" :
+                "secondary";
+
+                <tr>
+                    <td>@i.Opis</td>
+
+                    <td>@i.Datum.ToString("dd.MM.yyyy")</td>
+
+                    <td>
+                        <span class="badge bg-@badge">
+                            @(string.IsNullOrWhiteSpace(i.Ozbiljnost) ? "Nepoznato" : i.Ozbiljnost)
+                        </span>
+                    </td>
+
+                    <td>
+                        @if (i.IncidentiNastambe != null && i.IncidentiNastambe.Any())
+                        {
+                            <span class="text-muted">
+                                @string.Join(", ", i.IncidentiNastambe.Select(n => n.Nastamba.Naziv))
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+
+                    <td>
+                        @if (i.IncidentiZivotinje != null && i.IncidentiZivotinje.Any())
+                        {
+                            <span class="text-muted">
+                                @string.Join(", ", i.IncidentiZivotinje.Select(z => z.Zivotinja.Ime))
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@i.ID" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil-square"></i> Uredi
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@i.ID" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Obriši
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
